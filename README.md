@@ -104,8 +104,11 @@ docs/
   404.html                a página do endereço que não existe
   latest.json             o manifesto (escrito pelo script de publicação)
   assets/css/site.css     o estilo; cor e medida saem das variáveis do :root
+  assets/css/effects.css  os efeitos da home, e o estado parado de cada um
   assets/js/boot.js       tema e idioma, antes de a página aparecer
-  assets/js/site.js       a home: efeitos de rolagem e botões de download
+  assets/js/site.js       a entrada da home: liga cada parte, na ordem
+  assets/js/downloads.js  os botões de download
+  assets/js/effects/      um arquivo por efeito (a lista está logo abaixo)
   assets/js/download.js   o redirecionador
   assets/js/i18n.js       a troca de idioma
   assets/js/manifest.js   a leitura do latest.json
@@ -116,6 +119,37 @@ tools/
   check.dart              confere textos, links, manifesto e política de segurança
   screenshot.dart         fotografa a página nos dois temas e em duas larguras
 ```
+
+### Os efeitos
+
+Cada efeito é um arquivo de `assets/js/effects/`, ligado por um atributo
+`data-` no HTML; a aparência, e o estado parado de cada um, está no
+`effects.css`.
+
+| Arquivo | O efeito | No HTML |
+|---|---|---|
+| `reveal.js` | o que sobe ao entrar na tela; os títulos que chegam palavra por palavra | `class="reveal"`, `data-split` |
+| `scroll.js` | o parallax, o cabeçalho, a barra e o aro de progresso, o trilho dos passos, o ponteiro da faixa | `data-parallax`, `data-steps`, `data-band` |
+| `pointer.js` | a luz que segue o ponteiro, o aparelho que inclina, o foco de luz nos cartões, o botão que se deixa puxar | `data-pointer-glow`, `data-tilt`, `data-spotlight`, `data-magnetic` |
+| `particles.js` | a constelação do fundo da abertura, num `<canvas>` | `data-particles` |
+| `demo.js` | o relógio que anda e o app que bate o ponto sozinho, em laço | `data-demo`, `data-clock-*` |
+| `showcase.js` | a seção dos apps: o aparelho fica preso e a rolagem troca de cena | `data-showcase`, `data-scene` |
+| `theme.js` | o botão de tema, que abre a troca num círculo | `data-theme-switch` |
+| `motion.js` | o que os outros dividem: as preferências de quem visita | — |
+
+Três regras valem para todos:
+
+- **confere `prefers-reduced-motion` antes de ligar** (`motion.js`), e tem um
+  estado parado no CSS — é o que se vê sem JavaScript;
+- **para quando ninguém vê**: o laço da encenação e o da constelação param com
+  a seção fora da tela e com a aba escondida;
+- **`transform` é do JavaScript; `translate`, `rotate` e `scale`, do CSS.** São
+  propriedades à parte, e é o que deixa uma camada flutuar e andar com a
+  rolagem ao mesmo tempo.
+
+A marca — o cronômetro — é um `<symbol id="mark">` com o traçado do
+`logo_color.svg` do flavor `clockinit`. Não a redesenhe: o botão de cima passa
+2,9 unidades acima do aro, numa caixa de 95,25, e a olho ele sai maior.
 
 ### Ver antes de publicar
 
