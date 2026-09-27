@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--
+    Tudo o que a página carrega vem dela mesma: sem fonte, script ou estilo de
+    terceiros. Por isso não há `style=""` no HTML nem script embutido — quem
+    precisa de estilo calculado (o parallax) escreve pelo JavaScript.
+  -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <title data-i18n="metaTitle">clockin.it — apps de registro de ponto</title>
+  <meta name="description" data-i18n-attr="content:metaDescription" content="Baixe os apps do clockin.it: registro de ponto com reconhecimento facial e geolocalização, kiosk compartilhado e gestão de colaboradores.">
+
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f8f3">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a1114">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="clockin.it">
+  <meta property="og:title" data-i18n-attr="content:metaTitle" content="clockin.it — apps de registro de ponto">
+  <meta property="og:description" data-i18n-attr="content:metaDescription" content="Baixe os apps do clockin.it: registro de ponto com reconhecimento facial e geolocalização, kiosk compartilhado e gestão de colaboradores.">
+  <meta property="og:image" content="https://clockin-it.github.io/app-distribution/assets/img/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="stylesheet" href="assets/css/site.css">
+
+  <script src="assets/js/boot.js"></script>
+  <script type="module" src="assets/js/site.js"></script>
+</head>
+<body>
+  <!-- Os ícones da página, desenhados uma vez e usados por <use href="#…">. -->
+  <svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+    <symbol id="icon-stopwatch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="13.5" r="7.5"/>
+      <path d="M12 9.5v4l2.6 2.2"/>
+      <path d="M9.5 2.75h5"/>
+      <path d="M12 2.75V6"/>
+    </symbol>
+    <symbol id="icon-face" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 8.5V6a2 2 0 0 1 2-2h2.5"/>
+      <path d="M15.5 4H18a2 2 0 0 1 2 2v2.5"/>
+      <path d="M20 15.5V18a2 2 0 0 1-2 2h-2.5"/>
+      <path d="M8.5 20H6a2 2 0 0 1-2-2v-2.5"/>
+      <path d="M9 9.75v1.5"/>
+      <path d="M15 9.75v1.5"/>
+      <path d="M12 9.75v3.5h-1"/>
+      <path d="M9 15.25c.85.8 1.85 1.2 3 1.2s2.15-.4 3-1.2"/>
+    </symbol>
+    <symbol id="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21.25s-6.75-5.7-6.75-11a6.75 6.75 0 0 1 13.5 0c0 5.3-6.75 11-6.75 11z"/>
+      <circle cx="12" cy="10.25" r="2.4"/>
+    </symbol>
+    <symbol id="icon-kiosk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5" y="2.75" width="14" height="13.5" rx="2"/>
+      <circle cx="12" cy="8" r="2"/>
+      <path d="M8.75 13.25c.5-1.5 1.7-2.25 3.25-2.25s2.75.75 3.25 2.25"/>
+      <path d="M12 16.25v4"/>
+      <path d="M8 21.25h8"/>
+    </symbol>
+    <symbol id="icon-team" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="8" r="3.25"/>
+      <path d="M2.75 19.5c0-3.3 2.75-5.75 6.25-5.75s6.25 2.45 6.25 5.75"/>
+      <path d="M15.75 4.95a3.25 3.25 0 0 1 0 6.1"/>
+      <path d="M17.5 14.1c2.3.65 3.75 2.6 3.75 5.4"/>
+    </symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2.75l7.25 3v5.5c0 4.7-2.95 8.5-7.25 10-4.3-1.5-7.25-5.3-7.25-10v-5.5l7.25-3z"/>
+      <path d="M8.75 12.1l2.3 2.3 4.2-4.4"/>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12.75l4.25 4.25L19 7"/>
+    </symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3.75v11"/>
+      <path d="M7.5 10.5l4.5 4.5 4.5-4.5"/>
+      <path d="M4.75 19.75h14.5"/>
+    </symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/>
+      <path d="M13 6l6 6-6 6"/>
+    </symbol>
+    <symbol id="icon-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 16l8.25-8.25"/>
+      <path d="M9 7.5h7.5V15"/>
+    </symbol>
+    <symbol id="icon-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="6.75" y="2.25" width="10.5" height="19.5" rx="2.5"/>
+      <path d="M10.75 18.5h2.5"/>
+    </symbol>
+    <symbol id="icon-desktop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.75" y="4.5" width="16.5" height="11.5" rx="1.75"/>
+      <path d="M2 19.5h20"/>
+    </symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3.75"/>
+      <path d="M12 2.75v2.5M12 18.75v2.5M2.75 12h2.5M18.75 12h2.5M5.45 5.45l1.8 1.8M16.75 16.75l1.8 1.8M5.45 18.55l1.8-1.8M16.75 7.25l1.8-1.8"/>
+    </symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.25 14.4A8.5 8.5 0 0 1 9.6 3.75a8.5 8.5 0 1 0 10.65 10.65z"/>
+    </symbol>
+    <symbol id="icon-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8.5"/>
+      <path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="8.5" r="3.75"/>
+      <path d="M4.75 20c.6-3.6 3.5-5.75 7.25-5.75s6.65 2.15 7.25 5.75"/>
+    </symbol>
+    <symbol id="icon-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4.5" y="3.5" width="15" height="17" rx="2"/>
+      <path d="M8.25 8.5h7.5M8.25 12h7.5M8.25 15.5h4.5"/>
+    </symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="5" width="16" height="15.5" rx="2"/>
+      <path d="M4 10h16M8.5 3v4M15.5 3v4"/>
+    </symbol>
+    <symbol id="icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.75 11.25L12 4l8.25 7.25"/>
+      <path d="M6 9.75v10.5h12V9.75"/>
+      <path d="M10 20.25v-5.5h4v5.5"/>
+    </symbol>
+    <symbol id="icon-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 16.5v-5.75a6 6 0 0 1 12 0v5.75l1.5 2h-15l1.5-2z"/>
+      <path d="M10 20.75c.5.6 1.2.9 2 .9s1.5-.3 2-.9"/>
+    </symbol>
+    <!-- A marca: o cronômetro do ícone do app. -->
+    <symbol id="mark" viewBox="0 0 100 100">
+      <rect class="mark-accent" x="37" y="5" width="26" height="14" rx="4"/>
+      <path class="mark-ring" fill-rule="evenodd" d="M50 14a40 40 0 1 0 0 80 40 40 0 0 0 0-80zm0 15.5a24.5 24.5 0 1 1 0 49 24.5 24.5 0 0 1 0-49z"/>
+      <path class="mark-accent" d="M50 37.5a3 3 0 0 1 3.4-3A19.5 19.5 0 0 1 69.5 50.6a3 3 0 0 1-3 3.4H53a3 3 0 0 1-3-3V37.5z"/>
+    </symbol>
+  </svg>
+
+  <a class="skip-link" href="#content" data-i18n="skipToContent">Pular para o conteúdo</a>
+
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <header class="site-header" data-header>
+    <div class="container site-header__inner">
+      <a class="brand" href="#top" aria-label="clockin.it">
+        <img class="brand__logo only-light" src="assets/img/logo-light.svg" alt="" width="150" height="28">
+        <img class="brand__logo only-dark" src="assets/img/logo-dark.svg" alt="" width="150" height="28">
+      </a>
+
+      <nav class="site-nav" aria-label="Seções da página" data-i18n-attr="aria-label:navLabel">
+        <a href="#apps" data-i18n="navApps">Apps</a>
+        <a href="#features" data-i18n="navFeatures">Recursos</a>
+        <a href="#how-it-works" data-i18n="navHowItWorks">Como funciona</a>
+        <a href="#download" data-i18n="navDownload">Download</a>
+      </nav>
+
+      <div class="site-tools">
+        <div class="language-switch" role="group" aria-label="Idioma" data-i18n-attr="aria-label:languageLabel">
+          <button type="button" data-language-option="pt" lang="pt-BR" aria-pressed="true" title="Português">PT</button>
+          <button type="button" data-language-option="en" lang="en" aria-pressed="false" title="English">EN</button>
+          <button type="button" data-language-option="es" lang="es" aria-pressed="false" title="Español">ES</button>
+        </div>
+        <button class="theme-switch" type="button" data-theme-switch aria-label="Tema: automático" data-i18n-attr="aria-label:themeAuto">
+          <svg class="theme-switch__icon theme-switch__icon--auto" aria-hidden="true"><use href="#icon-auto"/></svg>
+          <svg class="theme-switch__icon theme-switch__icon--light" aria-hidden="true"><use href="#icon-sun"/></svg>
+          <svg class="theme-switch__icon theme-switch__icon--dark" aria-hidden="true"><use href="#icon-moon"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="content">
+    <!-- ================================================================ -->
+    <!-- Abertura                                                          -->
+    <!-- ================================================================ -->
+    <section class="hero" id="top" data-parallax-host data-pointer-host>
+      <div class="hero__backdrop" aria-hidden="true">
+        <div class="aurora aurora--one" data-parallax="-0.18" data-pointer="18"></div>
+        <div class="aurora aurora--two" data-parallax="-0.3" data-pointer="-26"></div>
+        <div class="aurora aurora--three" data-parallax="-0.1" data-pointer="12"></div>
+        <div class="grid-pattern" data-parallax="-0.06"></div>
+        <div class="orbit orbit--large" data-parallax="-0.24" data-pointer="-10"></div>
+        <div class="orbit orbit--small" data-parallax="-0.42" data-pointer="22"></div>
+        <svg class="floating-mark floating-mark--one" data-parallax="-0.5" data-pointer="34"><use href="#mark"/></svg>
+        <svg class="floating-mark floating-mark--two" data-parallax="-0.34" data-pointer="-28"><use href="#mark"/></svg>
+      </div>
+
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <p class="eyebrow reveal" data-i18n="heroEyebrow">Registro de ponto</p>
+          <h1 class="hero__title reveal">
+            <span data-i18n="heroTitleLead">Ponto rápido, seguro e</span>
+            <span class="accent-text" data-i18n="heroTitleAccent">prático.</span>
+          </h1>
+          <p class="hero__lead reveal" data-i18n="heroLead">Registre a jornada pelo celular, pelo computador ou em um kiosk compartilhado, com reconhecimento facial e geolocalização, integrado ao sistema de controle de ponto da sua empresa.</p>
+          <div class="hero__actions reveal">
+            <a class="button button--primary" href="#download">
+              <svg class="button__icon" aria-hidden="true"><use href="#icon-download"/></svg>
+              <span data-hero-download data-i18n="heroDownload">Baixar os apps</span>
+            </a>
+            <a class="button button--ghost" href="#apps">
+              <span data-i18n="heroApps">Conhecer os apps</span>
+              <svg class="button__icon" aria-hidden="true"><use href="#icon-arrow"/></svg>
+            </a>
+          </div>
+          <p class="hero__note reveal" data-i18n="heroNote">Disponível para Android, iOS e macOS. Windows e Linux em breve.</p>
+        </div>
+
+        <!-- Uma encenação da home do app, desenhada em HTML: decorativa. -->
+        <div class="hero__stage" aria-hidden="true">
+          <div class="stage-glow" data-parallax="-0.12" data-pointer="-14"></div>
+
+          <div class="device-wrap" data-parallax="-0.08" data-pointer="10">
+            <div class="device">
+              <div class="device__screen">
+                <div class="mock-header">
+                  <img class="mock-header__logo" src="assets/img/logo-dark.svg" alt="" width="104" height="20">
+                  <span class="mock-avatar"><svg><use href="#icon-user"/></svg></span>
+                </div>
+                <div class="mock-body">
+                  <p class="mock-weekday" data-clock-weekday>segunda-feira</p>
+                  <p class="mock-date" data-clock-date>4 de março</p>
+                  <p class="mock-time" data-clock-time>08:02:36</p>
+                  <div class="mock-punch">
+                    <span class="mock-punch__pulse"></span>
+                    <span class="mock-punch__pulse mock-punch__pulse--late"></span>
+                    <span class="mock-punch__button"><svg><use href="#icon-stopwatch"/></svg></span>
+                  </div>
+                  <p class="mock-label" data-i18n="mockLastEntries">Últimos registros</p>
+                  <div class="mock-entries">
+                    <span class="mock-entry">08:02</span>
+                    <span class="mock-entry">12:01</span>
+                    <span class="mock-entry">13:04</span>
+                    <span class="mock-entry mock-entry--next">18:00</span>
+                  </div>
+                </div>
+                <div class="mock-nav">
+                  <svg><use href="#icon-list"/></svg>
+                  <svg><use href="#icon-calendar"/></svg>
+                  <svg class="is-active"><use href="#icon-home"/></svg>
+                  <svg><use href="#icon-stopwatch"/></svg>
+                  <svg><use href="#icon-bell"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="float-card float-card--face" data-parallax="-0.26" data-pointer="30">
+            <div class="float-card__body">
+              <span class="float-card__icon float-card__icon--scan">
+                <svg><use href="#icon-face"/></svg>
+                <span class="scan-line"></span>
+              </span>
+              <span class="float-card__text">
+                <strong data-i18n="mockFaceTitle">Reconhecimento facial</strong>
+                <span data-i18n="mockFaceText">Rosto identificado</span>
+              </span>
+              <span class="float-card__badge"><svg><use href="#icon-check"/></svg></span>
+            </div>
+          </div>
+
+          <div class="float-card float-card--location" data-parallax="-0.4" data-pointer="-36">
+            <div class="float-card__body">
+              <span class="float-card__icon"><svg><use href="#icon-pin"/></svg></span>
+              <span class="float-card__text">
+                <strong data-i18n="mockLocationTitle">Localização</strong>
+                <span data-i18n="mockLocationText">Local da marcação registrado</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="float-card float-card--punch" data-parallax="-0.18" data-pointer="24">
+            <div class="float-card__body">
+              <span class="float-card__icon float-card__icon--solid"><svg><use href="#icon-check"/></svg></span>
+              <span class="float-card__text">
+                <strong data-i18n="mockPunchTitle">Entrada registrada</strong>
+                <span class="float-card__time">08:02</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a class="scroll-cue" href="#apps" aria-hidden="true" tabindex="-1"><span></span></a>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- Os três apps                                                      -->
+    <!-- ================================================================ -->
+    <section class="section" id="apps">
+      <div class="container">
+        <header class="section__header">
+          <p class="eyebrow reveal" data-i18n="appsEyebrow">Os apps</p>
+          <h2 class="section__title reveal" data-i18n="appsTitle">Três apps, um só sistema</h2>
+          <p class="section__lead reveal" data-i18n="appsLead">Cada app cuida de uma parte da jornada, e todos falam com o mesmo sistema clockin.it.</p>
+        </header>
+
+        <div class="app-grid">
+          <article class="app-card reveal" data-tilt>
+            <span class="app-card__glare" aria-hidden="true"></span>
+            <div class="app-card__top">
+              <span class="app-icon"><img src="assets/img/app-icon-app.png" alt="" width="96" height="96" loading="lazy"></span>
+              <span class="tag" data-i18n="appTag">Para o colaborador</span>
+            </div>
+            <h3 class="app-card__name">clockin.it</h3>
+            <p class="app-card__subtitle" data-i18n="appSubtitle">Ponto rápido, seguro e prático</p>
+            <p class="app-card__summary" data-i18n="appSummary">Registre seu ponto de forma rápida, segura e prática, com os recursos de identificação definidos pela empresa.</p>
+            <ul class="check-list">
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="appFeature1">Entrada, saída e demais marcações da jornada</span></li>
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="appFeature2">Reconhecimento facial, quando habilitado pela empresa</span></li>
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="appFeature3">Geolocalização da marcação, quando configurada</span></li>
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="appFeature4">Consulta das marcações realizadas</span></li>
+            </ul>
+            <a class="text-link" href="#download-app">
+              <span data-i18n="appDownloadLink">Baixar</span> clockin.it
+              <svg aria-hidden="true"><use href="#icon-arrow"/></svg>
+            </a>
+          </article>
+
+          <article class="app-card reveal" data-tilt>
+            <span class="app-card__glare" aria-hidden="true"></span>
+            <div class="app-card__top">
+              <span class="app-icon"><img src="assets/img/app-icon-kiosk.png" alt="" width="96" height="96" loading="lazy"></span>
+              <span class="tag" data-i18n="kioskTag">Para o ponto compartilhado</span>
+            </div>
+            <h3 class="app-card__name">clockin.it kiosk</h3>
+            <p class="app-card__subtitle" data-i18n="kioskSubtitle">Ponto facial em um só kiosk</p>
+            <p class="app-card__summary" data-i18n="kioskSummary">Um terminal compartilhado de registro de ponto: vários colaboradores fazem as marcações em um único dispositivo.</p>
+            <ul class="check-list">
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="kioskFeature1">Vários colaboradores em um único dispositivo</span></li>
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="kioskFeature2">Identificação rápida por reconhecimento facial</span></li>
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="kioskFeature3">Interface dedicada ao registro de ponto</span></li>
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="kioskFeature4">Configurado e gerenciado pelo clockin.it admin</span></li>
+            </ul>
+            <a class="text-link" href="#download-kiosk">
+              <span data-i18n="appDownloadLink">Baixar</span> clockin.it kiosk
+              <svg aria-hidden="true"><use href="#icon-arrow"/></svg>
+            </a>
+          </article>
+
+          <article class="app-card reveal" data-tilt>
+            <span class="app-card__glare" aria-hidden="true"></span>
+            <div class="app-card__top">
+              <span class="app-icon"><img src="assets/img/app-icon-appadmin.png" alt="" width="96" height="96" loading="lazy"></span>
+              <span class="tag" data-i18n="appadminTag">Para gestores</span>
+            </div>
+            <h3 class="app-card__name">clockin.it admin</h3>
+            <p class="app-card__subtitle" data-i18n="appadminSubtitle">Gestão de colaboradores, faces e kiosks</p>
+            <p class="app-card__summary" data-i18n="appadminSummary">O app de gestão do clockin.it: prepare o ambiente para que a equipe registre o ponto de forma rápida e segura.</p>
+            <ul class="check-list">
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="appadminFeature1">Cadastro e gestão de colaboradores</span></li>
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="appadminFeature2">Cadastro das faces para o reconhecimento facial</span></li>
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="appadminFeature3">Criação e gestão de kiosks</span></li>
+              <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span data-i18n="appadminFeature4">Configuração dos recursos de registro de ponto</span></li>
+            </ul>
+            <a class="text-link" href="#download-appadmin">
+              <span data-i18n="appDownloadLink">Baixar</span> clockin.it admin
+              <svg aria-hidden="true"><use href="#icon-arrow"/></svg>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- Recursos                                                          -->
+    <!-- ================================================================ -->
+    <section class="section section--tinted" id="features">
+      <div class="container">
+        <header class="section__header">
+          <p class="eyebrow reveal" data-i18n="featuresEyebrow">Recursos</p>
+          <h2 class="section__title reveal" data-i18n="featuresTitle">O que o clockin.it faz pela jornada</h2>
+          <p class="section__lead reveal" data-i18n="featuresLead">Do celular do colaborador ao terminal da portaria, o registro é simples para quem marca e confiável para a empresa.</p>
+        </header>
+
+        <div class="feature-grid">
+          <article class="feature reveal">
+            <span class="feature__icon"><svg aria-hidden="true"><use href="#icon-stopwatch"/></svg></span>
+            <h3 data-i18n="featurePunchTitle">Registro de ponto</h3>
+            <p data-i18n="featurePunchText">Entrada, saída e demais marcações da jornada, em poucos toques.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="feature__icon"><svg aria-hidden="true"><use href="#icon-face"/></svg></span>
+            <h3 data-i18n="featureFaceTitle">Reconhecimento facial</h3>
+            <p data-i18n="featureFaceText">A identificação do colaborador pelo rosto, quando habilitada pela empresa.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="feature__icon"><svg aria-hidden="true"><use href="#icon-pin"/></svg></span>
+            <h3 data-i18n="featureLocationTitle">Geolocalização</h3>
+            <p data-i18n="featureLocationText">O local de cada marcação registrado, quando configurado.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="feature__icon"><svg aria-hidden="true"><use href="#icon-kiosk"/></svg></span>
+            <h3 data-i18n="featureKioskTitle">Kiosk compartilhado</h3>
+            <p data-i18n="featureKioskText">Um único dispositivo para o ponto de toda a equipe.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="feature__icon"><svg aria-hidden="true"><use href="#icon-team"/></svg></span>
+            <h3 data-i18n="featureManagementTitle">Gestão centralizada</h3>
+            <p data-i18n="featureManagementText">Colaboradores, faces e kiosks administrados pelo clockin.it admin.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="feature__icon"><svg aria-hidden="true"><use href="#icon-shield"/></svg></span>
+            <h3 data-i18n="featureSecurityTitle">Seguro e rastreável</h3>
+            <p data-i18n="featureSecurityText">Marcações seguras, rastreáveis e integradas ao sistema de controle de ponto.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- A faixa: a marca em camadas, cada uma numa velocidade             -->
+    <!-- ================================================================ -->
+    <section class="band" data-parallax-host>
+      <div class="band__layers" aria-hidden="true">
+        <svg class="band__mark band__mark--far" data-parallax="-0.16"><use href="#mark"/></svg>
+        <svg class="band__mark band__mark--middle" data-parallax="-0.32"><use href="#mark"/></svg>
+        <svg class="band__mark band__mark--near" data-parallax="-0.52"><use href="#mark"/></svg>
+      </div>
+      <div class="container">
+        <p class="band__text reveal" data-i18n="bandText">Do cadastro à marcação, tudo no mesmo sistema.</p>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- Como funciona                                                     -->
+    <!-- ================================================================ -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <header class="section__header">
+          <p class="eyebrow reveal" data-i18n="howEyebrow">Como funciona</p>
+          <h2 class="section__title reveal" data-i18n="howTitle">Três passos, do cadastro ao ponto</h2>
+        </header>
+
+        <ol class="steps" data-steps>
+          <li class="step" data-step>
+            <span class="step__marker"><span class="step__number">1</span></span>
+            <span class="step__icon"><img src="assets/img/app-icon-appadmin.png" alt="" width="56" height="56" loading="lazy"></span>
+            <h3 data-i18n="howStep1Title">O gestor prepara</h3>
+            <p data-i18n="howStep1Text">No clockin.it admin, cadastra os colaboradores, as faces e os kiosks.</p>
+          </li>
+          <li class="step" data-step>
+            <span class="step__marker"><span class="step__number">2</span></span>
+            <span class="step__icon step__icon--pair">
+              <img src="assets/img/app-icon-app.png" alt="" width="56" height="56" loading="lazy">
+              <img src="assets/img/app-icon-kiosk.png" alt="" width="56" height="56" loading="lazy">
+            </span>
+            <h3 data-i18n="howStep2Title">O colaborador registra</h3>
+            <p data-i18n="howStep2Text">No app ou no kiosk, com os recursos de identificação definidos pela empresa.</p>
+          </li>
+          <li class="step" data-step>
+            <span class="step__marker"><span class="step__number">3</span></span>
+            <span class="step__icon step__icon--glyph"><svg aria-hidden="true"><use href="#icon-shield"/></svg></span>
+            <h3 data-i18n="howStep3Title">A empresa acompanha</h3>
+            <p data-i18n="howStep3Text">As marcações chegam ao sistema de gestão de jornada, seguras e rastreáveis.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- Download                                                          -->
+    <!-- ================================================================ -->
+    <section class="section section--tinted" id="download">
+      <div class="container">
+        <header class="section__header">
+          <p class="eyebrow reveal" data-i18n="downloadEyebrow">Download</p>
+          <h2 class="section__title reveal" data-i18n="downloadTitle">Baixe o app certo para você</h2>
+          <p class="section__lead reveal" data-i18n="downloadLead">Escolha o app e a plataforma. O link leva sempre à versão mais recente.</p>
+        </header>
+
+        <!--
+          Os botões de Android e iOS têm endereço fixo (a loja). Os de
+          computador (`data-source="manifest"`) nascem "Em breve" e são ligados
+          pelo site.js quando o latest.json tem a plataforma — uma plataforma
+          nova entra na página sem ninguém mexer neste arquivo.
+        -->
+        <div class="download-list">
+          <article class="download-card reveal" id="download-app" data-download-app="app">
+            <div class="download-card__app">
+              <span class="app-icon app-icon--small"><img src="assets/img/app-icon-app.png" alt="" width="64" height="64" loading="lazy"></span>
+              <div>
+                <h3>clockin.it</h3>
+                <p data-i18n="appTag">Para o colaborador</p>
+              </div>
+            </div>
+            <ul class="platforms">
+              <li>
+                <a class="platform" data-platform="android" href="https://play.google.com/store/apps/details?id=it.clockin.app.cii" target="_blank" rel="noopener">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-phone"/></svg>
+                  <span class="platform__text"><strong>Android</strong><span class="platform__detail" data-i18n="downloadGooglePlay">Google Play</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-external"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform" data-platform="ios" href="https://testflight.apple.com/join/bbRYNKz7" target="_blank" rel="noopener">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-phone"/></svg>
+                  <span class="platform__text"><strong>iOS</strong><span class="platform__detail" data-i18n="downloadTestFlight">TestFlight · beta</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-external"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform is-unavailable" data-platform="macos" data-source="manifest" aria-disabled="true">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
+                  <span class="platform__text"><strong>macOS</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform is-unavailable" data-platform="windows" data-source="manifest" aria-disabled="true">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
+                  <span class="platform__text"><strong>Windows</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform is-unavailable" data-platform="linux" data-source="manifest" aria-disabled="true">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
+                  <span class="platform__text"><strong>Linux</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+            </ul>
+          </article>
+
+          <article class="download-card reveal" id="download-kiosk" data-download-app="kiosk">
+            <div class="download-card__app">
+              <span class="app-icon app-icon--small"><img src="assets/img/app-icon-kiosk.png" alt="" width="64" height="64" loading="lazy"></span>
+              <div>
+                <h3>clockin.it kiosk</h3>
+                <p data-i18n="kioskTag">Para o ponto compartilhado</p>
+              </div>
+            </div>
+            <ul class="platforms">
+              <li>
+                <a class="platform" data-platform="android" href="https://play.google.com/store/apps/details?id=it.clockin.kiosk.cii" target="_blank" rel="noopener">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-phone"/></svg>
+                  <span class="platform__text"><strong>Android</strong><span class="platform__detail" data-i18n="downloadGooglePlay">Google Play</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-external"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform" data-platform="ios" href="https://testflight.apple.com/join/mJmEQS9f" target="_blank" rel="noopener">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-phone"/></svg>
+                  <span class="platform__text"><strong>iOS</strong><span class="platform__detail" data-i18n="downloadTestFlight">TestFlight · beta</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-external"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform is-unavailable" data-platform="macos" data-source="manifest" aria-disabled="true">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
+                  <span class="platform__text"><strong>macOS</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform is-unavailable" data-platform="windows" data-source="manifest" aria-disabled="true">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
+                  <span class="platform__text"><strong>Windows</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform is-unavailable" data-platform="linux" data-source="manifest" aria-disabled="true">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
+                  <span class="platform__text"><strong>Linux</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+            </ul>
+          </article>
+
+          <article class="download-card reveal" id="download-appadmin" data-download-app="appadmin">
+            <div class="download-card__app">
+              <span class="app-icon app-icon--small"><img src="assets/img/app-icon-appadmin.png" alt="" width="64" height="64" loading="lazy"></span>
+              <div>
+                <h3>clockin.it admin</h3>
+                <p data-i18n="appadminTag">Para gestores</p>
+              </div>
+            </div>
+            <ul class="platforms">
+              <li>
+                <a class="platform" data-platform="android" href="https://play.google.com/store/apps/details?id=it.clockin.appadmin.cii" target="_blank" rel="noopener">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-phone"/></svg>
+                  <span class="platform__text"><strong>Android</strong><span class="platform__detail" data-i18n="downloadGooglePlay">Google Play</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-external"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform" data-platform="ios" href="https://testflight.apple.com/join/4bQ8kaNe" target="_blank" rel="noopener">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-phone"/></svg>
+                  <span class="platform__text"><strong>iOS</strong><span class="platform__detail" data-i18n="downloadTestFlight">TestFlight · beta</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-external"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform is-unavailable" data-platform="macos" data-source="manifest" aria-disabled="true">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
+                  <span class="platform__text"><strong>macOS</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform is-unavailable" data-platform="windows" data-source="manifest" aria-disabled="true">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
+                  <span class="platform__text"><strong>Windows</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+              <li>
+                <a class="platform is-unavailable" data-platform="linux" data-source="manifest" aria-disabled="true">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
+                  <span class="platform__text"><strong>Linux</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+            </ul>
+          </article>
+        </div>
+
+        <noscript>
+          <p class="download-note download-note--warning">Os downloads para computador precisam de JavaScript. Sem ele, use a lista de versões no GitHub.</p>
+        </noscript>
+
+        <div class="download-notes reveal">
+          <p class="download-note" data-i18n="downloadMacosNote">Os apps de macOS são assinados e notarizados pela Apple. Requer macOS 12 ou superior.</p>
+          <p class="download-note" data-i18n="downloadDisclaimer">Os recursos disponíveis podem variar de acordo com a configuração adotada pela empresa.</p>
+          <a class="text-link" href="https://github.com/clockin-it/app-distribution/releases" target="_blank" rel="noopener">
+            <span data-i18n="downloadAllReleases">Todas as versões no GitHub</span>
+            <svg aria-hidden="true"><use href="#icon-external"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand">
+        <img class="brand__logo only-light" src="assets/img/logo-light.svg" alt="clockin.it" width="150" height="28" loading="lazy">
+        <img class="brand__logo only-dark" src="assets/img/logo-dark.svg" alt="clockin.it" width="150" height="28" loading="lazy">
+        <p data-i18n="footerTagline">Registro de ponto rápido, seguro e prático.</p>
+      </div>
+      <nav class="site-footer__links" aria-label="clockin.it">
+        <a href="https://clockin.it" target="_blank" rel="noopener" data-i18n="footerSite">Site</a>
+        <a href="https://clockin.it/pages/politicaPrivacidade/" target="_blank" rel="noopener" data-i18n="footerPrivacy">Política de privacidade</a>
+        <a href="https://clockin.it/pages/termosUso/" target="_blank" rel="noopener" data-i18n="footerTerms">Termos de uso</a>
+        <a href="mailto:support@clockin.it" data-i18n="footerSupport">Suporte</a>
+      </nav>
+      <p class="site-footer__legal">© <span data-current-year>2026</span> CLOCK IN IT LTDA. <span data-i18n="footerRights">Todos os direitos reservados.</span></p>
+    </div>
+  </footer>
+</body>
+</html>

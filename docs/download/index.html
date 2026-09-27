@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <!-- Um endereço de passagem: não é página para aparecer em busca. -->
+  <meta name="robots" content="noindex">
+
+  <title data-i18n="redirectTitle">Download — clockin.it</title>
+  <meta name="color-scheme" content="light dark">
+
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <link rel="stylesheet" href="../assets/css/site.css">
+
+  <script src="../assets/js/boot.js"></script>
+  <script type="module" src="../assets/js/download.js"></script>
+</head>
+<body class="notice-page">
+  <svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+    <symbol id="mark" viewBox="0 0 100 100">
+      <rect class="mark-accent" x="37" y="5" width="26" height="14" rx="4"/>
+      <path class="mark-ring" fill-rule="evenodd" d="M50 14a40 40 0 1 0 0 80 40 40 0 0 0 0-80zm0 15.5a24.5 24.5 0 1 1 0 49 24.5 24.5 0 0 1 0-49z"/>
+      <path class="mark-accent" d="M50 37.5a3 3 0 0 1 3.4-3A19.5 19.5 0 0 1 69.5 50.6a3 3 0 0 1-3 3.4H53a3 3 0 0 1-3-3V37.5z"/>
+    </symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3.75v11"/>
+      <path d="M7.5 10.5l4.5 4.5 4.5-4.5"/>
+      <path d="M4.75 19.75h14.5"/>
+    </symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/>
+      <path d="M13 6l6 6-6 6"/>
+    </symbol>
+  </svg>
+
+  <main class="notice">
+    <svg class="notice__mark notice__mark--working" data-notice-mark aria-hidden="true"><use href="#mark"/></svg>
+    <h1 data-notice-title data-i18n="redirectStarting">Seu download vai começar…</h1>
+    <p data-notice-text data-i18n="redirectManual">Se não começar, use o link direto.</p>
+    <a class="button button--primary" data-notice-link hidden>
+      <svg class="button__icon" aria-hidden="true"><use href="#icon-download"/></svg>
+      <span data-notice-link-label></span>
+    </a>
+    <a class="text-link" href="../">
+      <span data-i18n="redirectHome">Ver todos os apps</span>
+      <svg aria-hidden="true"><use href="#icon-arrow"/></svg>
+    </a>
+    <noscript>
+      <p>Este endereço precisa de JavaScript. As versões estão em <a class="text-link" href="https://github.com/clockin-it/app-distribution/releases">github.com/clockin-it/app-distribution/releases</a>.</p>
+    </noscript>
+  </main>
+</body>
+</html>

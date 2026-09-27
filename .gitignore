@@ -1,4 +1,15 @@
-### ALL ###
-*
-!/README.md
-!/.gitignore
+### O que as ferramentas geram ###
+# As imagens do tools/screenshot.dart.
+/build/
+
+### Sistema e editor ###
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+### Dart ###
+# As ferramentas de tools/ rodam sem pubspec; isto é só para o caso de o
+# editor criar a pasta.
+.dart_tool/
