@@ -1,0 +1,865 @@
+/*
+ * effects.css — os efeitos da home: o que se move, o que responde ao ponteiro
+ * e o que acompanha a rolagem. Vem depois do site.css, que tem as cores, as
+ * medidas e o desenho de cada seção.
+ *
+ * Quem liga cada efeito é um arquivo de assets/js/effects/. Aqui fica a
+ * aparência — e o estado parado de cada um, que é o que se vê sem JavaScript
+ * e com "reduzir movimento".
+ *
+ * Quem mexe em `transform` é o JavaScript (o parallax, a inclinação, o botão
+ * puxado). As animações daqui usam `translate`, `rotate` e `scale`, que são
+ * propriedades à parte e convivem com ele no mesmo elemento.
+ */
+
+:root {
+  /* A cor da constelação, em "r, g, b": o canvas monta o rgba() com ela. */
+  --particle: 78, 154, 54;
+  --grain-opacity: 0.045;
+  --dial-line: rgba(59, 78, 89, 0.22);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --particle: 139, 216, 113;
+    --grain-opacity: 0.06;
+    --dial-line: rgba(255, 255, 255, 0.16);
+  }
+}
+
+:root[data-theme="dark"] {
+  --particle: 139, 216, 113;
+  --grain-opacity: 0.06;
+  --dial-line: rgba(255, 255, 255, 0.16);
+}
+
+/* ========================================================================== */
+/* A textura                                                                  */
+/* ========================================================================== */
+
+/*
+ * Um grão fino por cima de tudo: tira o ar de tela lisa dos degradês. Sem
+ * `mix-blend-mode`: numa camada do tamanho da tela ele obriga o navegador a
+ * recompor a página inteira a cada quadro da rolagem.
+ */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+  opacity: var(--grain-opacity);
+  pointer-events: none;
+}
+
+/* ========================================================================== */
+/* Os títulos, palavra por palavra                                            */
+/* ========================================================================== */
+
+/*
+ * Cada palavra sobe de dentro de uma caixa que a corta. O respiro em cima e
+ * embaixo guarda o acento e a perna das letras; a margem negativa o devolve,
+ * para a linha não crescer.
+ */
+.split__word {
+  display: inline-block;
+  padding-block: 0.1em 0.2em;
+  margin-block: -0.1em -0.2em;
+  overflow: hidden;
+  overflow: clip;
+  vertical-align: bottom;
+}
+
+.split__inner {
+  display: inline-block;
+}
+
+.js .split__inner {
+  translate: 0 118%;
+  transition: translate 0.95s var(--ease-out) calc(var(--word, 0) * 55ms);
+}
+
+.js .split.is-visible .split__inner,
+.js .is-visible .split .split__inner {
+  translate: 0 0;
+}
+
+/* A palavra em destaque: o degradê vai em cada palavra, e não no título. */
+.accent-words:not(.split),
+.accent-words .split__inner {
+  background: var(--accent-gradient);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: accent-shimmer 7s var(--ease-in-out) infinite alternate;
+}
+
+/* ========================================================================== */
+/* O cabeçalho                                                                */
+/* ========================================================================== */
+
+/* A pílula que corre por baixo do menu até a seção em que a pessoa está. */
+.site-nav {
+  position: relative;
+}
+
+.site-nav a {
+  z-index: 1;
+}
+
+.site-nav__marker {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: var(--marker-width, 0);
+  height: 38px;
+  margin-top: -19px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-soft);
+  opacity: 0;
+  translate: var(--marker-x, 0) 0;
+  transition:
+    translate 0.5s var(--ease-out),
+    width 0.5s var(--ease-out),
+    opacity 0.3s ease;
+}
+
+.site-nav__marker.is-visible {
+  opacity: 1;
+}
+
+.js .site-nav a.is-current {
+  background: transparent;
+}
+
+/* A troca de tema se abre num círculo, a partir do botão. */
+:root.is-changing-theme::view-transition-old(root),
+:root.is-changing-theme::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root.is-changing-theme::view-transition-new(root) {
+  animation: theme-reveal 0.75s var(--ease-in-out) both;
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--theme-x, 50%) var(--theme-y, 0));
+  }
+
+  to {
+    clip-path: circle(
+      var(--theme-radius, 150vmax) at var(--theme-x, 50%) var(--theme-y, 0)
+    );
+  }
+}
+
+/* ========================================================================== */
+/* A abertura                                                                 */
+/* ========================================================================== */
+
+.hero__particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
+  mask-image: linear-gradient(180deg, #000 60%, transparent);
+}
+
+/* A luz que segue o ponteiro. */
+.hero__glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 560px;
+  height: 560px;
+  margin: -280px 0 0 -280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--brand-glow), transparent 62%);
+  opacity: 0;
+  translate: var(--glow-x, 50vw) var(--glow-y, 40vh);
+  transition: opacity 0.6s ease;
+}
+
+.hero__glow.is-visible {
+  opacity: 0.55;
+}
+
+/* O mostrador: os sessenta traços de um relógio, girando devagar. */
+.dial {
+  --dial-radius: min(33vw, 360px);
+  position: absolute;
+  top: 50%;
+  right: -2%;
+  width: calc(2 * var(--dial-radius));
+  height: calc(2 * var(--dial-radius));
+  margin-top: calc(-1 * var(--dial-radius));
+  will-change: transform;
+}
+
+.dial::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from -0.35deg,
+    var(--dial-line) 0 0.7deg,
+    transparent 0.7deg 6deg
+  );
+  -webkit-mask-image: radial-gradient(
+    closest-side,
+    transparent 94%,
+    #000 94.5% 99.5%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    closest-side,
+    transparent 94%,
+    #000 94.5% 99.5%,
+    transparent 100%
+  );
+  animation: spin 120s linear infinite;
+}
+
+/* --- O aparelho: inclina com o ponteiro, e o vidro reflete ---------------- */
+
+.device[data-tilt] {
+  transform: perspective(1400px) rotateX(var(--tilt-x, 0deg))
+    rotateY(var(--tilt-y, 0deg));
+}
+
+.device__screen {
+  position: relative;
+}
+
+.device__glare {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: radial-gradient(
+    circle at var(--glare-x, 50%) var(--glare-y, 30%),
+    rgba(255, 255, 255, 0.26),
+    transparent 58%
+  );
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+/* --- O app batendo o ponto sozinho ---------------------------------------- */
+
+/*
+ * O palco diz o estado em `data-demo-state`: idle, press, scan e success
+ * (effects/demo.js). Cada peça abaixo reage ao estado que é dela.
+ */
+
+.mock-punch__button {
+  transition:
+    scale 0.3s var(--ease-out),
+    box-shadow 0.3s ease;
+}
+
+[data-demo-state="press"] .mock-punch__button {
+  scale: 0.86;
+  box-shadow: 0 2px 8px var(--brand-glow);
+}
+
+/* A câmera, que cobre a tela durante a leitura do rosto. */
+.mock-scan {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 38%, #33474f 0%, #131e23 72%);
+  color: #ffffff;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.4s ease,
+    visibility 0s linear 0.4s;
+}
+
+[data-demo-state="scan"] .mock-scan,
+[data-demo-state="success"] .mock-scan {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.mock-scan__person {
+  position: absolute;
+  bottom: 4%;
+  width: 96%;
+  height: 78%;
+  fill: rgba(255, 255, 255, 0.16);
+}
+
+.mock-scan .mock-scan__frame {
+  margin-bottom: 120px;
+}
+
+.mock-scan__label {
+  position: absolute;
+  right: 0;
+  bottom: 22%;
+  left: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+[data-demo-state="success"] .mock-scan__label,
+[data-demo-state="success"] .mock-scan__line {
+  opacity: 0;
+}
+
+/* A confirmação, que sobe de baixo. */
+.mock-success {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 22px 16px 20px;
+  border-radius: 26px;
+  background: var(--brand);
+  color: var(--on-brand);
+  text-align: center;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.34);
+  opacity: 0;
+  translate: 0 120%;
+  transition:
+    translate 0.6s var(--ease-out),
+    opacity 0.3s ease;
+}
+
+[data-demo-state="success"] .mock-success {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.mock-success__check {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  scale: 0.4;
+  transition: scale 0.6s var(--ease-out) 0.15s;
+}
+
+[data-demo-state="success"] .mock-success__check {
+  scale: 1;
+}
+
+.mock-success__check svg {
+  width: 30px;
+  height: 30px;
+}
+
+.mock-success strong {
+  font-size: 1rem;
+}
+
+.mock-success__time {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A batida nova entrando na fileira dos últimos registros. */
+.mock-entry.is-new {
+  background: var(--brand);
+  color: var(--on-brand);
+  animation: entry-in 0.7s var(--ease-out) both;
+}
+
+@keyframes entry-in {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* Os cartões em volta acompanham o que acontece na tela. */
+.float-card__body {
+  transition:
+    scale 0.5s var(--ease-out),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.float-card__badge {
+  transition: scale 0.5s var(--ease-out);
+}
+
+[data-demo-state="scan"] .float-card--face .float-card__body,
+[data-demo-state="success"] .float-card--punch .float-card__body,
+[data-demo-state="success"] .float-card--location .float-card__body {
+  border-color: var(--brand);
+  scale: 1.06;
+  box-shadow:
+    0 0 0 4px var(--brand-soft),
+    var(--shadow-lift);
+}
+
+[data-demo-state="success"] .float-card--location .float-card__body {
+  transition-delay: 0.18s;
+}
+
+[data-demo-state="scan"] .float-card__badge {
+  scale: 0;
+}
+
+/* A linha do cartão só varre enquanto o rosto é lido. */
+.float-card .scan-line {
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+[data-demo-state="scan"] .float-card .scan-line {
+  animation-play-state: running;
+  opacity: 1;
+}
+
+/* ========================================================================== */
+/* A esteira                                                                  */
+/* ========================================================================== */
+
+.marquee {
+  display: grid;
+  gap: 12px;
+  padding-block: 30px;
+  border-block: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  overflow: clip;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+/*
+ * A faixa tem a lista duas vezes, uma atrás da outra: andar metade da largura
+ * dela é andar uma lista inteira, e o fim emenda no começo.
+ */
+.marquee__row {
+  display: flex;
+  width: max-content;
+  animation: marquee 52s linear infinite;
+}
+
+.marquee__row--reverse {
+  animation-duration: 64s;
+  animation-direction: reverse;
+}
+
+.marquee:hover .marquee__row {
+  animation-play-state: paused;
+}
+
+.marquee__list {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.marquee__list li {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding-left: 28px;
+  font-size: clamp(1.25rem, 2.4vw, 1.875rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.marquee__list li::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+/* A segunda faixa só tem o contorno das letras. */
+.marquee__row--reverse li {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--text-muted);
+}
+
+.marquee__row--reverse li::after {
+  background: var(--border-strong);
+}
+
+@keyframes marquee {
+  to {
+    translate: -50% 0;
+  }
+}
+
+/* ========================================================================== */
+/* Os cartões sob o ponteiro                                                  */
+/* ========================================================================== */
+
+/*
+ * O grupo divide um foco de luz: a borda do cartão acende no ponto mais perto
+ * do ponteiro, e o fundo clareia por baixo do texto.
+ */
+[data-spotlight] {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-spotlight]::before,
+[data-spotlight]::after {
+  content: "";
+  position: absolute;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+/* A borda: o degradê aparece só no fio entre a caixa de fora e a de dentro. */
+[data-spotlight]::before {
+  inset: -1px;
+  z-index: 1;
+  padding: 1.5px;
+  background: radial-gradient(
+    280px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    var(--brand),
+    transparent 72%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+[data-spotlight]::after {
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    460px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    var(--brand-soft),
+    transparent 68%
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-spotlight-group]:hover [data-spotlight]::before,
+  [data-spotlight-group]:hover [data-spotlight]::after {
+    opacity: 1;
+  }
+
+  /* A borda que acende é a do foco: a do cartão não precisa mudar de cor. */
+  .feature[data-spotlight]:hover,
+  .download-card[data-spotlight]:hover {
+    border-color: var(--border);
+  }
+}
+
+/* O botão que se deixa puxar pelo ponteiro. */
+[data-magnetic] {
+  transform: translate3d(var(--pull-x, 0), var(--pull-y, 0), 0);
+}
+
+.button[data-magnetic] {
+  transition:
+    transform 0.4s var(--ease-out),
+    translate 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out),
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* O traço dos ícones se desenha quando o cartão entra em cena. */
+.js .icon-draw > * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.2s var(--ease-in-out)
+    calc(var(--reveal-order, 0) * var(--reveal-step) + 0.25s);
+}
+
+.js .is-visible .icon-draw > * {
+  stroke-dashoffset: 0;
+}
+
+/* ========================================================================== */
+/* A faixa                                                                    */
+/* ========================================================================== */
+
+/* O mostrador da faixa, e o ponteiro que a rolagem faz andar. */
+.band__dial {
+  --band-dial: min(84vw, 620px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--band-dial);
+  height: var(--band-dial);
+  margin: calc(var(--band-dial) / -2) 0 0 calc(var(--band-dial) / -2);
+  will-change: transform;
+}
+
+.band__dial::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from -0.4deg,
+    rgba(255, 255, 255, 0.34) 0 0.8deg,
+    transparent 0.8deg 6deg
+  );
+  -webkit-mask-image: radial-gradient(
+    closest-side,
+    transparent 93%,
+    #000 93.5% 99.5%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    closest-side,
+    transparent 93%,
+    #000 93.5% 99.5%,
+    transparent 100%
+  );
+}
+
+.band__hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 3px;
+  height: 46%;
+  margin-left: -1.5px;
+  border-radius: 3px;
+  background: linear-gradient(0deg, transparent, rgba(255, 255, 255, 0.6));
+  transform-origin: 50% 100%;
+  rotate: var(--band-turn, 0.12turn);
+}
+
+.band__hand::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  margin-left: -5.5px;
+  border-radius: 50%;
+  background: #b4ec9f;
+  box-shadow: 0 0 0 6px rgba(180, 236, 159, 0.22);
+}
+
+/* ========================================================================== */
+/* O rodapé e a volta ao topo                                                 */
+/* ========================================================================== */
+
+.site-footer {
+  position: relative;
+  overflow: hidden;
+  overflow: clip;
+}
+
+.site-footer__inner {
+  position: relative;
+}
+
+.site-footer__mark {
+  position: absolute;
+  right: -70px;
+  bottom: -110px;
+  width: 340px;
+  height: 340px;
+  opacity: 0.07;
+  rotate: -14deg;
+}
+
+.to-top {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 45;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--surface-glass);
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 16px;
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  backdrop-filter: saturate(160%) blur(14px);
+  transition:
+    opacity 0.3s ease,
+    translate 0.4s var(--ease-out),
+    visibility 0s linear 0.4s,
+    color 0.2s ease;
+}
+
+.to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition-delay: 0s;
+}
+
+.to-top:hover {
+  color: var(--accent-text);
+}
+
+.to-top__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  rotate: -90deg;
+}
+
+.to-top__track,
+.to-top__fill {
+  fill: none;
+  stroke-width: 3;
+}
+
+.to-top__track {
+  stroke: var(--border);
+}
+
+/* O aro enche com a rolagem: o comprimento do traço é 1, e falta o resto. */
+.to-top__fill {
+  stroke: var(--brand);
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--scroll-progress, 0));
+}
+
+.to-top__arrow {
+  width: 20px;
+  height: 20px;
+  transition: translate 0.25s var(--ease-out);
+}
+
+.to-top:hover .to-top__arrow {
+  translate: 0 -3px;
+}
+
+/* ========================================================================== */
+/* Telas menores                                                              */
+/* ========================================================================== */
+
+@media (max-width: 960px) {
+  .dial {
+    --dial-radius: min(46vw, 300px);
+    top: 72%;
+    right: -14%;
+  }
+
+  .site-footer__mark {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+@media (max-width: 560px) {
+  .marquee {
+    padding-block: 22px;
+  }
+
+  .hero__glow {
+    display: none;
+  }
+}
+
+/* ========================================================================== */
+/* Quem pediu menos movimento                                                 */
+/* ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .js .split__inner {
+    translate: 0 0;
+  }
+
+  .js .icon-draw > * {
+    stroke-dashoffset: 0;
+  }
+
+  .hero__particles,
+  .hero__glow,
+  .mock-scan,
+  .mock-success,
+  .mock-scan__line {
+    display: none;
+  }
+
+  .float-card .scan-line {
+    display: none;
+  }
+
+  .device[data-tilt],
+  [data-magnetic] {
+    transform: none;
+  }
+
+  /* A esteira parada mostra uma lista só, centrada. */
+  .marquee__row {
+    width: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .marquee__list + .marquee__list {
+    display: none;
+  }
+
+  .marquee__list {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media print {
+  .grain,
+  .marquee,
+  .to-top,
+  .hero__particles,
+  .hero__glow {
+    display: none;
+  }
+
+  .js .split__inner {
+    translate: 0 0;
+  }
+}

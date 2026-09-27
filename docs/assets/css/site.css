@@ -1353,117 +1353,514 @@ button {
   --reveal-order: 2;
 }
 
-/* --- Os três apps --------------------------------------------------------- */
-
-.app-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(16px, 2.4vw, 28px);
-  perspective: 1400px;
-}
-
-.app-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: clamp(24px, 2.6vw, 34px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-large);
-  background: var(--surface);
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
-  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
-  transform-style: preserve-3d;
-  will-change: transform;
-}
+/* --- Os três apps: a vitrine ---------------------------------------------- */
 
 /*
- * A entrada em cena e a inclinação dividem o elemento: a espera escalonada é
- * só da entrada (`opacity`, `translate`), e não da inclinação nem da sombra.
+ * Cada app é uma cena: o texto de um lado, o aparelho do outro. Em tela larga
+ * e com JavaScript o trilho é alto — uma tela por cena — e o miolo fica preso:
+ * a rolagem troca de cena, e não de lugar. Sem script, ou em tela estreita, as
+ * cenas são uma lista, uma embaixo da outra.
  */
-.js .app-card.reveal {
-  transition:
-    opacity var(--reveal-duration) var(--ease-out) calc(var(--reveal-order, 0) * var(--reveal-step)),
-    translate var(--reveal-duration) var(--ease-out) calc(var(--reveal-order, 0) * var(--reveal-step)),
-    transform 0.35s var(--ease-out),
-    box-shadow 0.35s ease,
-    border-color 0.35s ease;
+.showcase {
+  padding-bottom: clamp(40px, 6vw, 88px);
 }
 
-.app-card.is-tilting {
-  transition-duration: var(--reveal-duration), var(--reveal-duration), 0.08s, 0.35s, 0.35s;
+.showcase .section__header {
+  margin-bottom: clamp(24px, 4vw, 48px);
 }
 
-.app-card:hover {
-  border-color: var(--brand);
-  box-shadow: var(--shadow-lift);
-}
-
-.app-card:nth-child(2) {
-  --reveal-order: 1;
-}
-
-.app-card:nth-child(3) {
-  --reveal-order: 2;
-}
-
-.app-card__glare {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    420px circle at var(--glare-x, 50%) var(--glare-y, 0%),
-    var(--brand-soft),
-    transparent 65%
-  );
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s ease;
-}
-
-.app-card:hover .app-card__glare {
-  opacity: 1;
-}
-
-.app-card > :not(.app-card__glare) {
+.showcase__inner {
   position: relative;
+  display: grid;
+  gap: clamp(64px, 9vw, 112px);
 }
 
-.app-card__top {
+.showcase__progress {
+  display: none;
+}
+
+.scene {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+
+.scene__copy {
+  display: grid;
+  gap: 14px;
+  align-content: center;
+  justify-items: start;
+}
+
+.scene__heading {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 6px;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
 }
 
-.app-card__name {
-  font-size: 1.5rem;
+.scene__name {
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
   font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 
-.app-card__subtitle {
-  margin-top: -8px;
+.scene__subtitle {
+  margin-top: -6px;
   color: var(--accent-text);
+  font-size: 1.125rem;
   font-weight: 700;
 }
 
-.app-card__summary {
+.scene__summary {
+  max-width: 34em;
   color: var(--text-muted);
 }
 
-.app-card .check-list {
+.scene .check-list {
+  max-width: 34em;
   margin-block: 6px 10px;
   padding-top: 18px;
   border-top: 1px solid var(--border);
 }
 
-/* O link fecha o cartão: os três ficam na mesma linha, qualquer que seja o texto. */
-.app-card .text-link {
-  align-self: flex-start;
-  margin-top: auto;
+.scene__visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 600px;
+  perspective: 1400px;
+}
+
+.scene__halo {
+  position: absolute;
+  width: min(440px, 80%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--brand-glow), transparent 68%);
+  filter: blur(40px);
+}
+
+/* O aparelho de cada cena: o celular em pé, e o tablet do kiosk deitado. */
+.device--scene {
+  position: relative;
+  width: 280px;
+  height: 572px;
+  rotate: -3deg;
+  animation-name: scene-float;
+  animation-duration: 11s;
+}
+
+/* Só sobe e desce: o giro da cena é do `rotate` de cada aparelho. */
+@keyframes scene-float {
+  from {
+    translate: 0 -6px;
+  }
+
+  to {
+    translate: 0 8px;
+  }
+}
+
+.device--tablet {
+  width: min(560px, 100%);
+  height: 410px;
+  padding: 12px;
+  border-radius: 36px;
+  rotate: 2deg;
+}
+
+.device--tablet .device__screen {
+  grid-template-rows: auto 1fr;
+  border-radius: 26px;
+}
+
+.mock-header--compact {
+  padding: 30px 18px 14px;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.device--tablet .mock-header--compact {
+  padding-top: 16px;
+}
+
+.mock-header__clock {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Os registros do mês: um dia por linha, com as batidas dele. */
+.mock-sheet {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 16px 14px;
+}
+
+.mock-month {
+  color: var(--mock-muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mock-day {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  border-radius: 14px;
+  background: var(--mock-chip);
+}
+
+.mock-day__number {
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.mock-day__entries {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+
+.mock-day .mock-entry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px 0;
+  background: var(--mock-background);
+  font-size: 0.6875rem;
+}
+
+.mock-day .mock-entry svg {
+  width: 12px;
+  height: 12px;
+  color: var(--mock-time);
+}
+
+/* A câmera do kiosk: alguém diante do aparelho, e o rosto reconhecido. */
+.mock-camera {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 35%, #33474f 0%, #17242a 70%);
+  overflow: hidden;
+}
+
+.mock-camera__person {
+  position: absolute;
+  bottom: -6%;
+  width: 62%;
+  height: 100%;
+  fill: rgba(255, 255, 255, 0.16);
+}
+
+.mock-camera__frame,
+.mock-scan__frame {
+  position: relative;
+  width: 168px;
+  height: 168px;
+  margin-bottom: 96px;
+  /* Só os quatro cantos: a moldura da leitura do rosto. */
+  background:
+    linear-gradient(var(--brand), var(--brand)) top left / 36px 4px no-repeat,
+    linear-gradient(var(--brand), var(--brand)) top left / 4px 36px no-repeat,
+    linear-gradient(var(--brand), var(--brand)) top right / 36px 4px no-repeat,
+    linear-gradient(var(--brand), var(--brand)) top right / 4px 36px no-repeat,
+    linear-gradient(var(--brand), var(--brand)) bottom left / 36px 4px no-repeat,
+    linear-gradient(var(--brand), var(--brand)) bottom left / 4px 36px no-repeat,
+    linear-gradient(var(--brand), var(--brand)) bottom right / 36px 4px no-repeat,
+    linear-gradient(var(--brand), var(--brand)) bottom right / 4px 36px no-repeat;
+  overflow: hidden;
+}
+
+.mock-scan__line {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 38%;
+  border-bottom: 2px solid var(--brand);
+  background: linear-gradient(180deg, transparent, var(--brand-glow));
+  translate: 0 -100%;
+  animation: scan 2.4s var(--ease-in-out) infinite;
+}
+
+.mock-camera__card {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  background: var(--brand);
+  color: var(--on-brand);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+
+.mock-camera__avatar {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.mock-camera__avatar svg {
+  width: 26px;
+  height: 26px;
+}
+
+.mock-camera__text {
+  display: grid;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.mock-camera__text strong {
+  font-size: 1rem;
+}
+
+.mock-camera__time {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A lista de colaboradores do admin: quem tem face, quem bate no kiosk. */
+.mock-people {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 14px;
+}
+
+.mock-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--mock-chip);
+  color: var(--mock-muted);
+  font-size: 0.75rem;
+}
+
+.mock-search svg {
+  width: 14px;
+  height: 14px;
+}
+
+.mock-person {
+  display: grid;
+  grid-template-columns: 34px 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.mock-person__avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--mock-chip);
+  color: var(--mock-time);
+  font-size: 0.6875rem;
+  font-weight: 800;
+}
+
+.mock-person__chip {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  color: var(--mock-muted);
+  opacity: 0.45;
+}
+
+.mock-person__chip.is-on {
+  background: var(--mock-chip);
+  color: var(--mock-time);
+  opacity: 1;
+}
+
+.mock-person__chip svg {
+  width: 16px;
+  height: 16px;
+}
+
+.mock-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 10px 12px 18px;
+  border-top: 1px solid var(--border);
+  color: var(--mock-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.mock-tabs span {
+  padding: 8px 0;
+  border-radius: var(--radius-pill);
+}
+
+.mock-tabs .is-active {
+  background: var(--brand);
+  color: var(--on-brand);
+}
+
+@media (min-width: 961px) {
+  .js .showcase__track {
+    /* Uma tela de rolagem por cena. */
+    height: 300vh;
+  }
+
+  .js .showcase__sticky {
+    position: sticky;
+    top: var(--header-height);
+    display: grid;
+    align-items: center;
+    height: calc(100vh - var(--header-height));
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .js .showcase__inner {
+    display: block;
+    height: min(660px, 100%);
+  }
+
+  .js .scene {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+    transition: visibility 0s linear 0.7s;
+  }
+
+  .js .scene.is-active {
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  /* O texto de cada cena entra por baixo e sai por cima, linha a linha. */
+  .js .scene__copy > * {
+    opacity: 0;
+    translate: 0 36px;
+    transition:
+      opacity 0.55s var(--ease-out),
+      translate 0.7s var(--ease-out);
+  }
+
+  .js .scene.is-past .scene__copy > * {
+    translate: 0 -36px;
+  }
+
+  .js .scene.is-active .scene__copy > * {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .js .scene.is-active .scene__copy > :nth-child(2) {
+    transition-delay: 0.06s;
+  }
+
+  .js .scene.is-active .scene__copy > :nth-child(3) {
+    transition-delay: 0.12s;
+  }
+
+  .js .scene.is-active .scene__copy > :nth-child(4) {
+    transition-delay: 0.18s;
+  }
+
+  .js .scene.is-active .scene__copy > :nth-child(5) {
+    transition-delay: 0.24s;
+  }
+
+  .js .scene.is-active .scene__copy > :nth-child(6) {
+    transition-delay: 0.3s;
+  }
+
+  /* O aparelho gira para entrar e para sair, como quem vira a página. */
+  .js .scene__visual > * {
+    opacity: 0;
+    transform: translate3d(0, 70px, 0) rotateY(-24deg) scale(0.9);
+    transition:
+      opacity 0.6s var(--ease-out),
+      transform 0.9s var(--ease-out);
+  }
+
+  .js .scene.is-past .scene__visual > * {
+    transform: translate3d(0, -70px, 0) rotateY(24deg) scale(0.9);
+  }
+
+  .js .scene.is-active .scene__visual > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Os três traços da lateral: em que cena a rolagem está. */
+  .js .showcase__progress {
+    position: absolute;
+    top: 50%;
+    right: -34px;
+    z-index: 2;
+    display: grid;
+    gap: 10px;
+    translate: 0 -50%;
+  }
+
+  .showcase__progress button {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .showcase__progress span {
+    width: 4px;
+    height: 100%;
+    border-radius: 4px;
+    background: var(--border-strong);
+    transition:
+      background-color 0.4s ease,
+      scale 0.4s var(--ease-out);
+  }
+
+  .showcase__progress button:hover span {
+    background: var(--text-muted);
+  }
+
+  .showcase__progress .is-active span {
+    background: var(--brand);
+    scale: 1.6 1;
+  }
 }
 
 /* --- Recursos ------------------------------------------------------------- */
@@ -2141,13 +2538,29 @@ button {
     right: -4%;
   }
 
-  .app-grid,
   .feature-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .app-card:last-child {
-    grid-column: 1 / -1;
+  /* A vitrine vira lista: o aparelho em cima, o texto embaixo. */
+  .scene {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .scene__visual {
+    order: -1;
+    min-height: 0;
+    padding-block: 24px;
+  }
+
+  .scene__copy {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .scene .check-list {
+    text-align: left;
   }
 
   .feature:nth-child(n) {
@@ -2168,12 +2581,10 @@ button {
     width: 124px;
   }
 
-  .app-grid,
   .feature-grid {
     grid-template-columns: 1fr;
   }
 
-  .app-card:nth-child(n),
   .feature:nth-child(n),
   .download-card:nth-child(n) {
     --reveal-order: 0;
@@ -2257,6 +2668,16 @@ button {
     width: 100%;
   }
 
+  .device--tablet {
+    height: 300px;
+  }
+
+  .device--tablet .mock-camera__frame {
+    width: 112px;
+    height: 112px;
+    margin-bottom: 84px;
+  }
+
   .site-tools {
     gap: 6px;
   }
@@ -2273,6 +2694,9 @@ button {
     margin-block: -24px -64px;
   }
 
+  .device--scene:not(.device--tablet) {
+    scale: 0.9;
+  }
 }
 
 @media (max-width: 340px) {
