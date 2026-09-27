@@ -1,0 +1,26 @@
+# Confere o site a cada pull request e a cada push na main — inclusive o do
+# script de publicação, que reescreve o docs/latest.json. O que é conferido
+# está no cabeçalho do tools/check.dart.
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - name: Formatação das ferramentas
+        run: dart format --output=none --set-exit-if-changed tools/
+      - name: Análise das ferramentas
+        run: dart analyze --fatal-infos tools/
+      - name: Conferência do site
+        run: dart tools/check.dart
