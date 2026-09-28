@@ -1,48 +1,48 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-28T04:03:17Z",
+  "updatedAt": "2026-09-28T06:16:07Z",
   "artifacts": [
     {
       "flavor": "clockinit",
       "app": "app",
       "platform": "macos",
       "format": "dmg",
-      "version": "2.1.9",
-      "buildNumber": 207,
-      "tag": "v2.1.9+207",
+      "version": "2.1.10",
+      "buildNumber": 208,
+      "tag": "v2.1.10+208",
       "fileName": "clockinit-app-macos.dmg",
-      "url": "https://github.com/clockin-it/app-distribution/releases/download/v2.1.9%2B207/clockinit-app-macos.dmg",
-      "size": 73029149,
-      "sha256": "7c34354bf1639acc3a0561f24554025d4b4e7a7dd31a3303db57fd364dd74a55",
-      "publishedAt": "2026-09-28T04:03:16Z"
+      "url": "https://github.com/clockin-it/app-distribution/releases/download/v2.1.10%2B208/clockinit-app-macos.dmg",
+      "size": 73029577,
+      "sha256": "7283a4935d740e2cd61afd29670969e5747272c220a8b7c21a8445354b370297",
+      "publishedAt": "2026-09-28T06:16:05Z"
     },
     {
       "flavor": "clockinit",
       "app": "kiosk",
       "platform": "macos",
       "format": "dmg",
-      "version": "2.1.9",
-      "buildNumber": 207,
-      "tag": "v2.1.9+207",
+      "version": "2.1.10",
+      "buildNumber": 208,
+      "tag": "v2.1.10+208",
       "fileName": "clockinit-kiosk-macos.dmg",
-      "url": "https://github.com/clockin-it/app-distribution/releases/download/v2.1.9%2B207/clockinit-kiosk-macos.dmg",
-      "size": 70172594,
-      "sha256": "3dd8a42531ea1d31b75752fec39129de04525dae753e640c960f8c138da3dacc",
-      "publishedAt": "2026-09-28T04:03:16Z"
+      "url": "https://github.com/clockin-it/app-distribution/releases/download/v2.1.10%2B208/clockinit-kiosk-macos.dmg",
+      "size": 70172931,
+      "sha256": "2c48665b757ff0b48c5536e712f190ea2a8fd1351c34c6cf21c2661a736a3545",
+      "publishedAt": "2026-09-28T06:16:05Z"
     },
     {
       "flavor": "clockinit",
       "app": "appadmin",
       "platform": "macos",
       "format": "dmg",
-      "version": "2.1.9",
-      "buildNumber": 207,
-      "tag": "v2.1.9+207",
+      "version": "2.1.10",
+      "buildNumber": 208,
+      "tag": "v2.1.10+208",
       "fileName": "clockinit-appadmin-macos.dmg",
-      "url": "https://github.com/clockin-it/app-distribution/releases/download/v2.1.9%2B207/clockinit-appadmin-macos.dmg",
-      "size": 70495732,
-      "sha256": "15b4446593f9cf8e3f04c22c8d9006a35d0b5de61ec89f6a870690181e67322b",
-      "publishedAt": "2026-09-28T04:03:16Z"
+      "url": "https://github.com/clockin-it/app-distribution/releases/download/v2.1.10%2B208/clockinit-appadmin-macos.dmg",
+      "size": 70497263,
+      "sha256": "6c47a7cd782a264f87c9e743b10a4358bfcb6c4c2d18d4165842a99ebb0ec6ca",
+      "publishedAt": "2026-09-28T06:16:05Z"
     }
   ]
 }
