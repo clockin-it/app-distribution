@@ -90,6 +90,11 @@
       <rect x="3.75" y="4.5" width="16.5" height="11.5" rx="1.75"/>
       <path d="M2 19.5h20"/>
     </symbol>
+    <symbol id="icon-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M3 12h18"/>
+      <path d="M12 3c2.5 2.6 3.75 5.6 3.75 9s-1.25 6.4-3.75 9c-2.5-2.6-3.75-5.6-3.75-9S9.5 5.6 12 3z"/>
+    </symbol>
     <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="3.75"/>
       <path d="M12 2.75v2.5M12 18.75v2.5M2.75 12h2.5M18.75 12h2.5M5.45 5.45l1.8 1.8M16.75 16.75l1.8 1.8M5.45 18.55l1.8-1.8M16.75 7.25l1.8-1.8"/>
@@ -739,10 +744,11 @@
         </header>
 
         <!--
-          Os botões de Android e iOS têm endereço fixo (a loja). Os de
-          computador (`data-source="manifest"`) nascem "Em breve" e são ligados
-          pelo site.js quando o latest.json tem a plataforma — uma plataforma
-          nova entra na página sem ninguém mexer neste arquivo.
+          Os botões de Android e iOS têm endereço fixo (a loja), e o da Web
+          também (o endereço do app: o kiosk não tem). Os de computador
+          (`data-source="manifest"`) nascem "Em breve" e são ligados pelo
+          site.js quando o latest.json tem a plataforma — uma plataforma nova
+          entra na página sem ninguém mexer neste arquivo.
         -->
         <div class="download-list" data-spotlight-group>
           <article class="download-card reveal" id="download-app" data-download-app="app" data-spotlight>
@@ -787,6 +793,13 @@
                   <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
                   <span class="platform__text"><strong>Linux</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
                   <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+              <li class="platforms__wide">
+                <a class="platform" data-platform="web" href="https://app.clockin.it" target="_blank" rel="noopener">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                  <span class="platform__text"><strong>Web</strong><span class="platform__detail"><span data-i18n="downloadWeb">No navegador</span> · app.clockin.it</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-external"/></svg>
                 </a>
               </li>
             </ul>
@@ -881,6 +894,13 @@
                   <svg class="platform__icon" aria-hidden="true"><use href="#icon-desktop"/></svg>
                   <span class="platform__text"><strong>Linux</strong><span class="platform__detail" data-platform-detail data-i18n="downloadComingSoon">Em breve</span></span>
                   <svg class="platform__action" aria-hidden="true"><use href="#icon-download"/></svg>
+                </a>
+              </li>
+              <li class="platforms__wide">
+                <a class="platform" data-platform="web" href="https://appadmin.clockin.it" target="_blank" rel="noopener">
+                  <svg class="platform__icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                  <span class="platform__text"><strong>Web</strong><span class="platform__detail"><span data-i18n="downloadWeb">No navegador</span> · appadmin.clockin.it</span></span>
+                  <svg class="platform__action" aria-hidden="true"><use href="#icon-external"/></svg>
                 </a>
               </li>
             </ul>

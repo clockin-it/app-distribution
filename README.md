@@ -25,6 +25,13 @@ de lá que sai o script que cria a release, sobe os instaladores e reescreve o
 Android e iOS saem pelas lojas (Google Play e TestFlight); a página só aponta
 para elas. O que este repositório hospeda é o instalador de computador.
 
+O `app` e o `appadmin` também rodam no navegador — `app.clockin.it` e
+`appadmin.clockin.it` —, e a página liga a eles numa linha **Web** de cada cartão.
+O endereço é **fixo no HTML**, como o das lojas, e não vem do `latest.json`: o
+manifesto só aceita link de release deste repositório. O `kiosk` fica sem a linha.
+Quem publica a web é o `clockin-it/app`, numa branch do `app-publish` por app e
+flavor.
+
 ## Como a página acha a última versão
 
 Cada release leva os instaladores com **nome fixo** — o mesmo de uma versão

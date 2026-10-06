@@ -87,6 +87,7 @@
   "downloadComingSoon": "Coming soon",
   "downloadGooglePlay": "Google Play",
   "downloadTestFlight": "TestFlight · beta",
+  "downloadWeb": "In your browser",
   "downloadVersion": "Version {version}",
   "downloadAlso": "Also as {format}",
   "downloadMacosNote": "The macOS apps are signed and notarized by Apple. Requires macOS 12 or later.",
