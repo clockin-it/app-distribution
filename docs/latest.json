@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-30T00:02:27Z",
+  "updatedAt": "2026-10-30T00:23:31Z",
   "artifacts": [
     {
       "flavor": "clockinit",
       "app": "app",
       "platform": "macos",
       "format": "dmg",
-      "version": "2.8.0",
-      "buildNumber": 215,
-      "tag": "v2.8.0+215",
+      "version": "2.8.1",
+      "buildNumber": 216,
+      "tag": "v2.8.1+216",
       "fileName": "clockinit-app-macos.dmg",
-      "url": "https://github.com/clockin-it/app-distribution/releases/download/v2.8.0%2B215/clockinit-app-macos.dmg",
-      "size": 66247063,
-      "sha256": "a867f934e1ebc7b1e2d8dd7f1b4079ff879447274e4a290d6335197c28e8154c",
-      "publishedAt": "2026-10-29T21:53:06Z"
+      "url": "https://github.com/clockin-it/app-distribution/releases/download/v2.8.1%2B216/clockinit-app-macos.dmg",
+      "size": 66247035,
+      "sha256": "aa64e7f2114acb2e152a9ec07dd983fb554a762936a5ec5d4539a1f9ebbdb526",
+      "publishedAt": "2026-10-30T00:02:25Z"
     },
     {
       "flavor": "clockinit",
